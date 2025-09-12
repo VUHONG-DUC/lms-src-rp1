@@ -47,6 +47,10 @@ public class AttendanceController {
 				.getAttendanceManagement(loginUserDto.getCourseId(), loginUserDto.getLmsUserId());
 		model.addAttribute("attendanceManagementDtoList", attendanceManagementDtoList);
 
+		//@author VU HONG DUC-Task25
+		//勤怠未入力有無の取得
+		boolean attendanceNotEnteredFlag = studentAttendanceService.attendanceNotEnteredCheck();
+		model.addAttribute("attendanceNotEnteredFlag", attendanceNotEnteredFlag);
 		return "attendance/detail";
 	}
 

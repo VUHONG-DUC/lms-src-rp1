@@ -1,6 +1,7 @@
 package jp.co.sss.lms.service;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -332,6 +333,28 @@ public class StudentAttendanceService {
 		}
 		// 完了メッセージ
 		return messageUtil.getMessage(Constants.PROP_KEY_ATTENDANCE_UPDATE_NOTICE);
+	}
+
+	/**
+	 * 勤怠過去未入力の有無チェック
+	 * @author VU HONG DUC_Task25
+	 * @return attendanceNotEnteredFlag
+	 */
+	public boolean attendanceNotEnteredCheck() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String todayStr = sdf.format(new Date());
+		Date today = java.sql.Date.valueOf(todayStr);
+		//勤怠過去日未入力件数の取得
+		int attendanceNotEnteredCount = tStudentAttendanceMapper.countByNullTrainingStartTimeOrTrainingEndTime(
+				loginUserDto.getLmsUserId(), Constants.DB_FLG_FALSE, today);
+		//勤怠過去日未入力チェック有無フラグ
+		boolean attendanceNotEnteredFlag;
+		if (attendanceNotEnteredCount > 0) {
+			attendanceNotEnteredFlag = true;
+		} else {
+			attendanceNotEnteredFlag = false;
+		}
+		return attendanceNotEnteredFlag;
 	}
 
 }
