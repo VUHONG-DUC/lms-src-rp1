@@ -20,6 +20,19 @@ public class DailyAttendanceForm {
 	private String trainingStartTime;
 	/** 退勤時間 */
 	private String trainingEndTime;
+	/**
+	 * 時間抜き出し用
+	 * @author VU HONG DUC_Task.26
+	 */
+	/**出勤時間（時）*/
+	private String trainingStartHour;
+	/**出勤時間（分）*/
+	private String trainingStartMinute;
+	/**退勤時間（時）*/
+	private String trainingEndHour;
+	/**退勤時間（分）*/
+	private String trainingEndMinute;
+	
 	/** 中抜け時間 */
 	private Integer blankTime;
 	/** 中抜け時間（画面表示用） */
