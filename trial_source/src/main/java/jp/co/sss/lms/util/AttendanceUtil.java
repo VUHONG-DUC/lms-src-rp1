@@ -147,4 +147,61 @@ public class AttendanceUtil {
 		return false;
 	}
 
+	/**
+	 * @author VU HONG DUC_Task.26
+	 * 時間マップ生成
+	 * @return 時間マップ
+	 */
+	public LinkedHashMap<Integer, String> setHourMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		String[] hour = { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
+				"15", "16", "17", "18", "19", "20", "21", "22", "23" };
+		map.put(null, "");
+		for (int i = 0; i < 24; i++) {
+			map.put(i, hour[i]);
+		}
+		return map;
+	}
+
+	/**
+	 * @author Vu HONG DUC_Task.26
+	 * 分マップ生成
+	 * @return 分マップ
+	 */
+	public LinkedHashMap<Integer, String> setMinuteMap() {
+		LinkedHashMap<Integer, String> map = new LinkedHashMap<>();
+		String[] minute = { "00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14",
+				"15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31",
+				"32", "33", "34", "35", "36", "37", "38", "39", "40", "41", "42", "43", "44", "45", "46", "47", "48",
+				"49", "50", "51", "52", "53", "54", "55", "56", "57", "58", "59" };
+		map.put(null, "");
+		for (int i = 0; i < 60; i++) {
+			map.put(i, minute[i]);
+		}
+		return map;
+	}
+
+	/**
+	 * 出退勤時間（時）を抜き出す
+	 * @author VU HONG DUC_Task.26
+	 * @param trainingStartOfEndTime
+	 * @return Integer時間（時）
+	 */
+	public Integer getHour(String trainingStartOfEndTime) {
+		String hour = trainingStartOfEndTime.substring(0, 2);
+		Integer hourChangeInt = Integer.parseInt(hour);
+		return hourChangeInt;
+	}
+
+	/**
+	 * 出退勤時間（分)を抜き出す
+	 *@author VU HONG DUC_Task.26
+	 * @param trainingStartOfEndTime
+	 * @return Integer時間（分）
+	 */
+	public Integer getMinute(String trainingStartOfEndTime) {
+		String minute = trainingStartOfEndTime.substring(3);
+		Integer minuteChangeInt = Integer.parseInt(minute);
+		return minuteChangeInt;
+	}
 }
