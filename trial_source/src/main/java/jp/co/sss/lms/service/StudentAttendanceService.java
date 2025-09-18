@@ -10,6 +10,8 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
@@ -403,5 +405,79 @@ public class StudentAttendanceService {
 			String trainingEndTime = trainingEndHour + trainingEndMinute;
 			dailyAttendanceForm.setTrainingEndTime(trainingEndTime);
 		}
+	}
+
+	public List<String> validation(List<DailyAttendanceForm> attendanceList, BindingResult result,
+			AttendanceForm attendanceForm) {
+		int i = 0;
+		boolean maxLengthFlg = false;
+		boolean trainingTimeRangeFlg = false;
+		boolean inputInvalidStartTimeFlg = false;
+		boolean inputInvalidEndTimeFlg = false;
+		boolean punchInEmptyFlg = false;
+		boolean priorityFlg = false;
+		List<Integer> iWrapperList = new ArrayList<>();
+		for (DailyAttendanceForm dailyAttendanceForm : attendanceList) {
+			//備考欄の文字数チェック
+			String note = dailyAttendanceForm.getNote();
+			int notCount = note.length();
+			if (notCount > 100) {
+				result.addError(new FieldError(result.getObjectName(), "attendanceList[" + i + "].note",
+						messageUtil.getMessage(Constants.VALID_KEY_MAXBYTELENGTH, new String[] { "備考", "100" })));
+				maxLengthFlg = true;
+			}
+			String trainingStartTime = dailyAttendanceForm.getTrainingStartTime();
+			String trainingEndTime = dailyAttendanceForm.getTrainingEndTime();
+			TrainingTime checkTime = new TrainingTime();
+			boolean isStartTime = checkTime.isValidTrainingTime(trainingStartTime);
+			boolean isEndTime = checkTime.isValidTrainingTime(trainingEndTime);
+			//出勤時間の時分が入力されているかをチェック
+			if (isStartTime == false) {
+				String trainingStartHour = dailyAttendanceForm.getTrainingStartHour();
+				String trainingStartMinute = dailyAttendanceForm.getTrainingStartMinute();
+				if (trainingStartHour.isBlank()) {
+					new FieldError(result.getObjectName(), "attendanceList[" + i + "].trainingStartHour",
+							messageUtil.getMessage(Constants.INPUT_INVALID, new String[] { "出勤時間" }));
+				} else if (trainingStartMinute.isBlank()) {
+					new FieldError(result.getObjectName(), "attendanceList[" + i + "].trainingStartMinute",
+							messageUtil.getMessage(Constants.INPUT_INVALID, new String[] { "出勤時間" }));
+				}
+				inputInvalidStartTimeFlg = true;
+				priorityFlg = true;
+			}
+			//退勤時間のジフンが入力されているかをチェック
+			if (isEndTime == false) {
+				String trainingEndHour = dailyAttendanceForm.getTrainingEndHour();
+				String trainingEndMinute = dailyAttendanceForm.getTrainingEndMinute();
+				if (trainingEndHour.isBlank()) {
+					new FieldError(result.getObjectName(), "attendanceList[" + i + "].trainingEndHour",
+							messageUtil.getMessage(Constants.INPUT_INVALID, new String[] { "退勤時間" }));
+				} else if (trainingEndMinute.isBlank()) {
+					new FieldError(result.getObjectName(), "attendanceList[" + i + "].trainingEndMinute",
+							messageUtil.getMessage(Constants.INPUT_INVALID, new String[] { "退勤時間" }));
+				}
+				inputInvalidEndTimeFlg = true;
+			}
+			//出勤時間無し、退勤時間ありの場合
+			if (trainingStartTime.isBlank() && !trainingEndTime.isBlank()) {
+				result.addError(new FieldError(result.getObjectName(), "attendanceList[" + i + "].trainingStartHour",
+						messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_PUNCHINEMPTY)));
+				result.addError(new FieldError(result.getObjectName(), "attendanceList[" + i + "].traininEndHour",
+						messageUtil.getMessage(Constants.VALID_KEY_ATTENDANCE_PUNCHINEMPTY)));
+				punchInEmptyFlg = true;
+			}
+		}
+		//エラー文を統一化
+		List<String> errorBox = new ArrayList<>();
+		if (maxLengthFlg) {
+			errorBox.add(messageUtil.getMessage(Constants.VALID_KEY_MAXLENGTH, new String[] { "備考", "100" }));
+		}
+		if(inputInvalidStartTimeFlg) {
+			errorBox.add(messageUtil.getMessage(Constants.INPUT_INVALID, new String[] {"出勤時間"}));
+		}
+		if(inputInvalidEndTimeFlg) {
+			errorBox.add(messageUtil.getMessage(Constants.INPUT_INVALID, new String[] {"退勤時間"}));
+		}
+		return errorBox;
 	}
 }

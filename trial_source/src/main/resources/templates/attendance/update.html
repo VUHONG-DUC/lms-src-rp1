@@ -125,13 +125,24 @@
 					<th:block th:if="${session.loginUserDto.role != '0001'}">
 						<input type="submit" value="戻る" name="indexCompany" class="btn btn-default" />
 					</th:block>
-					<input type="submit" value="更新" name="complete" class="btn btn-info" />
+					<!--@author VU HONG DUC_Task.27-->
+					<input type="submit" name="complete" class="btn btn-info" value="更新"
+						onclick="return registCheck();" />
 				</div>
 
 			</form>
 		</div>
 	</div>
-
+	<!--@author VU HONG DUC_Task.27-->
+	<script>
+		function registCheck() {
+			if (confirm("更新します。よろしいですか？")) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+	</script>
 </body>
 
 </html>
