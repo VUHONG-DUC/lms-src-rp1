@@ -1,18 +1,22 @@
 package jp.co.sss.lms.controller;
 
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import jakarta.validation.Valid;
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
 import jp.co.sss.lms.form.AttendanceForm;
+import jp.co.sss.lms.form.DailyAttendanceForm;
 import jp.co.sss.lms.service.StudentAttendanceService;
 import jp.co.sss.lms.util.Constants;
 
@@ -120,7 +124,6 @@ public class AttendanceController {
 		AttendanceForm attendanceForm = studentAttendanceService
 				.setAttendanceForm(attendanceManagementDtoList);
 		model.addAttribute("attendanceForm", attendanceForm);
-
 		return "attendance/update";
 	}
 
@@ -134,13 +137,27 @@ public class AttendanceController {
 	 * @throws ParseException
 	 */
 	@RequestMapping(path = "/update", params = "complete", method = RequestMethod.POST)
-	public String complete(AttendanceForm attendanceForm, Model model, BindingResult result)
+	public String complete(@Valid @ModelAttribute AttendanceForm attendanceForm, Model model, BindingResult result,
+			@ModelAttribute DailyAttendanceForm dailyAttendanceForm)
 			throws ParseException {
 		/**
 		 * @author VU HONG DUC_Task.26
 		 * 出退勤時間に設定
 		 */
 		studentAttendanceService.setAttendanceTime(attendanceForm);
+		/**
+		 * 入力チェック
+		 * @author VU HONG DUC_Task27
+		 */
+		boolean errorFlg = false;
+		List<String> errorBox = new ArrayList<>();
+		errorBox = studentAttendanceService.validation(attendanceForm.getAttendanceList(), result, attendanceForm);
+		if (result.hasErrors()) {
+			model.addAttribute("errorBox", errorBox);
+			errorFlg = true;
+			model.addAttribute("errorFlg", errorFlg);
+			return "attendance/update";
+		}
 		// 更新
 		String message = studentAttendanceService.update(attendanceForm);
 		model.addAttribute("message", message);
