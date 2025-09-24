@@ -376,7 +376,7 @@ public class StudentAttendanceService {
 		String todayStr = sdf.format(new Date());
 		Date today = java.sql.Date.valueOf(todayStr);
 		//勤怠過去日未入力件数の取得
-		int attendanceNotEnteredCount = tStudentAttendanceMapper.countByNullTrainingStartTimeOrTrainingEndTime(
+		int attendanceNotEnteredCount = tStudentAttendanceMapper.notEnterCount(
 				loginUserDto.getLmsUserId(), Constants.DB_FLG_FALSE, today);
 		//勤怠過去日未入力チェック有無フラグ
 		boolean attendanceNotEnteredFlag;

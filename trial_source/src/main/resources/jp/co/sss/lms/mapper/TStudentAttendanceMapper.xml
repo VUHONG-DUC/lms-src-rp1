@@ -104,7 +104,7 @@
 		WHERE student_attendance_id = #{studentAttendanceId}
 	</update>
 	<!-- @author VU HONG DUC_Task25 -->
-	<select id="countByNullTrainingStartTimeOrTrainingEndTime"
+	<select id="notEnterCount"
 		parameterType="jp.co.sss.lms.entity.TStudentAttendance">
 		SELECT COUNT(*)
 		FROM t_student_attendance
