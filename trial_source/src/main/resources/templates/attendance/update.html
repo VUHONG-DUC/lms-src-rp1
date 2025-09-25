@@ -44,6 +44,7 @@
 							<th class="w140">備考</th>
 						</tr>
 					</thead>
+					<!--@author VU HONG DUC_Task29-->
 					<tbody style="display: block; overflow-y: scroll; height: 560px;">
 						<th:block th:each="dailyAttendanceForm, stat : *{attendanceList}">
 							<tr>
@@ -63,12 +64,15 @@
 								</th:block>
 								<td class="w140">[[${dailyAttendanceForm.dispTrainingDate}]]</td>
 								<td class="w140">[[${dailyAttendanceForm.sectionName}]]</td>
-
+								<!--@author VU HONG DUC_Task.28 定時ボタン-->
+								<td class="w60" th:onclick="'standardTime('+ ${stat.index} +')'">
+									<input type="button" class="btn btn-success default-button" value="定時" />
+								</td>
 								<!--@author VU HONG DUC_Task.26 出勤時間-->
 								<td class="w70">
 									<select th:id="|startHour${stat.index}|"
-										th:name="|attendanceList[${stat.index}].trainingStartHour|"
-										class="form-control" th:errorclass="errorInput">
+										th:name="|attendanceList[${stat.index}].trainingStartHour|" class="form-control"
+										th:errorclass="errorInput">
 										<option th:each="hourMap: *{hourMap}" th:value="${hourMap.value}"
 											th:text="${hourMap.value}"
 											th:selected="${hourMap.value == dailyAttendanceForm.trainingStartHour}">
@@ -80,8 +84,8 @@
 									<select th:id="|startMinute${stat.index}|"
 										th:name="|attendanceList[${stat.index}].trainingStartMinute|"
 										class="form-control" th:errorclass="errorInput">
-										<option th:each="minuteMap: *{minuteMap}"
-											th:value="${minuteMap.value}" th:text="${minuteMap.value}"
+										<option th:each="minuteMap: *{minuteMap}" th:value="${minuteMap.value}"
+											th:text="${minuteMap.value}"
 											th:selected="${minuteMap.value == dailyAttendanceForm.trainingStartMinute}">
 										</option>
 									</select>
@@ -89,7 +93,8 @@
 								</td>
 								<td class="w80">
 									<select th:id="|endHour${stat.index}|"
-										th:name="|attendanceList[${stat.index}].trainingEndHour|" class="form-control" th:errorclass="errorInput">
+										th:name="|attendanceList[${stat.index}].trainingEndHour|" class="form-control"
+										th:errorclass="errorInput">
 										<option th:each="hourMap: ${attendanceForm.hourMap}" th:value="${hourMap.value}"
 											th:text="${hourMap.value}"
 											th:selected="${hourMap.value == dailyAttendanceForm.trainingEndHour}">
@@ -99,8 +104,8 @@
 								<td>:</td>
 								<td class="w80">
 									<select th:id="|endMinute${stat.index}|"
-										th:name="|attendanceList[${stat.index}].trainingEndMinute|"
-										class="form-control" th:errorclass="errorInput">
+										th:name="|attendanceList[${stat.index}].trainingEndMinute|" class="form-control"
+										th:errorclass="errorInput">
 										<option th:each="minuteMap: ${attendanceForm.minuteMap}"
 											th:value="${minuteMap.value}" th:text="${minuteMap.value}"
 											th:selected="${minuteMap.value == dailyAttendanceForm.trainingEndMinute}">
@@ -108,7 +113,8 @@
 									</select>
 								</td>
 								<td class="w80">
-									<select th:name="|attendanceList[${stat.index}].blankTime|" class="form-control" th:errorclass="errorInput">
+									<select th:name="|attendanceList[${stat.index}].blankTime|" class="form-control"
+										th:errorclass="errorInput">
 										<option th:each="blankTime : ${attendanceForm.blankTimes}"
 											th:value="${blankTime.key}" th:inlne="text" class="form-control"
 											th:selected="${blankTime.key == dailyAttendanceForm.blankTime}">
@@ -118,7 +124,8 @@
 								<td class="w70">[[${dailyAttendanceForm.statusDispName}]]</td>
 								<td class="w240">
 									<input type="text" th:name="|attendanceList[${stat.index}].note|"
-										th:value="${dailyAttendanceForm.note}" class="form-control" th:errorclass="errorInput"></input>
+										th:value="${dailyAttendanceForm.note}" class="form-control"
+										th:errorclass="errorInput"></input>
 								</td>
 							</tr>
 						</th:block>
@@ -148,6 +155,13 @@
 			} else {
 				return false;
 			}
+		}
+		//@author VU HONG DUC_Task.28 定時自動反映
+		function standardTime(index) {
+			document.getElementsByName("attendanceList[" + index + "].trainingStartHour")[0].value = '09';
+			document.getElementsByName("attendanceList[" + index + "].trainingStartMinute")[0].value = '00';
+			document.getElementsByName("attendanceList[" + index + "].trainingEndHour")[0].value = '18';
+			document.getElementsByName("attendanceList[" + index + "].trainingEndMinute")[0].value = '00';
 		}
 	</script>
 </body>

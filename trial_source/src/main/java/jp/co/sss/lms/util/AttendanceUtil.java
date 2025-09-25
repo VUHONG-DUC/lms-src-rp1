@@ -148,8 +148,8 @@ public class AttendanceUtil {
 	}
 
 	/**
+	 * *時間マップ生成
 	 * @author VU HONG DUC_Task.26
-	 * 時間マップ生成
 	 * @return 時間マップ
 	 */
 	public LinkedHashMap<Integer, String> setHourMap() {
@@ -164,8 +164,8 @@ public class AttendanceUtil {
 	}
 
 	/**
-	 * @author Vu HONG DUC_Task.26
 	 * 分マップ生成
+	 * @author Vu HONG DUC_Task.26
 	 * @return 分マップ
 	 */
 	public LinkedHashMap<Integer, String> setMinuteMap() {

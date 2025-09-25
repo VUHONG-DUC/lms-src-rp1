@@ -45,7 +45,7 @@
 	<div class="row">
 		<div class="bs-component col-sm-12">
 			<table class="table table-hover dataTable no-footer">
-				<thead class="db">
+				<thead class="db" style="display: block;">
 					<tr>
 						<th class="w160">日付</th>
 						<th class="w260">コース内容</th>
@@ -57,7 +57,7 @@
 					</tr>
 				</thead>
 
-				<tbody class="db">
+				<tbody class="db" style="display: block; overflow-y: scroll; height: 360px;">
 					<th:block th:each="attendanceManagementDto : ${attendanceManagementDtoList}"
 						th:object="${attendanceManagementDto}">
 						<tr>

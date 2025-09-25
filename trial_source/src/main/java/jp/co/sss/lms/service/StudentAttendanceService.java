@@ -406,7 +406,14 @@ public class StudentAttendanceService {
 			dailyAttendanceForm.setTrainingEndTime(trainingEndTime);
 		}
 	}
-
+	/**
+	 * 勤怠フォームの入力チェック
+	 * @author VU HONG DUC_Task.27
+	 * @param attendanceList
+	 * @param result
+	 * @param attendanceForm
+	 * @return errorBox
+	 */
 	public List<String> validation(List<DailyAttendanceForm> attendanceList, BindingResult result,
 			AttendanceForm attendanceForm) {
 		int i = 0;
@@ -417,6 +424,7 @@ public class StudentAttendanceService {
 		boolean inputInvalidEndTimeFlg = false;
 		boolean punchInEmptyFlg = false;
 		List<Integer> iWrapperList = new ArrayList<>();
+		
 		for (DailyAttendanceForm dailyAttendanceForm : attendanceList) {
 
 			//備考欄の文字数チェック
