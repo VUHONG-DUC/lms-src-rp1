@@ -15,9 +15,12 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import jakarta.validation.Valid;
 import jp.co.sss.lms.dto.AttendanceManagementDto;
 import jp.co.sss.lms.dto.LoginUserDto;
+import jp.co.sss.lms.dto.UserDetailDto;
 import jp.co.sss.lms.form.AttendanceForm;
 import jp.co.sss.lms.form.DailyAttendanceForm;
+import jp.co.sss.lms.service.CourseService;
 import jp.co.sss.lms.service.StudentAttendanceService;
+import jp.co.sss.lms.service.UserService;
 import jp.co.sss.lms.util.Constants;
 
 /**
@@ -33,7 +36,10 @@ public class AttendanceController {
 	private StudentAttendanceService studentAttendanceService;
 	@Autowired
 	private LoginUserDto loginUserDto;
-
+	@Autowired
+	private UserService userService;
+	@Autowired
+	private CourseService courseService;
 	/**
 	 * 勤怠管理画面 初期表示
 	 * 
@@ -168,5 +174,26 @@ public class AttendanceController {
 
 		return "attendance/detail";
 	}
-
+	/**
+	 * 勤怠情報確認（受講生一覧）
+	 * @author VU HONG DUC_Task.57
+	 * @param courseName
+	 * @param companyName
+	 * @param userName
+	 * @param model
+	 * @return 勤怠情報確認（受講生一覧）
+	 */
+	@RequestMapping(path="/list")
+	public String attendanceList(String courseName, String companyName, String userName,Model model) {
+		//受講生一覧の取得
+		List<UserDetailDto> userDetailDtoList = userService.getuserDetailForSearch(courseName, companyName, userName);
+		model.addAttribute("userDetailDto",userDetailDtoList);
+		//コースDTOリストの取得
+		model.addAttribute("courseDtoList", courseService.getCourseDtoList(Constants.DB_FLG_FALSE,Constants.DB_HIDDEN_FLG_FALSE));
+		//会場情報の取得
+		model.addAttribute("mPlaceList", userService.findPlaceByPlaceId(loginUserDto.getPlaceId(), Constants.DB_FLG_FALSE,Constants.DB_HIDDEN_FLG_FALSE));
+		//企業DTOリストの取得
+		model.addAttribute("mCompanyList", userService.getCompanyDto(Constants.DB_FLG_FALSE));
+		return "attendance/list";
+	}
 }

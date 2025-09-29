@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- @author VU HONG DUC_Task.57 -->
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+  <mapper namespace="jp.co.sss.lms.mapper.MCompanyMapper">
+  <select id="getCompanyDto" resultType="jp.co.sss.lms.dto.CompanyDto">
+  SELECT company_id,
+		company_name,
+		account_id,
+		company_name_kana,
+		post_number1,
+		post_number2,
+		prefecture,
+		address,
+		phone_number1,
+		phone_number2,
+		phone_number3,
+		representative_post,
+		representative_name,
+		capital,
+		worker_amount,
+		subsidy_phone_number1,
+		subsidy_phone_number2,
+		subsidy_phone_number3,
+		holiday,
+		work_start_time,
+		work_end_time,
+		rest_start_time,
+		rest_end_time,
+		last_modified_date,
+		file_share_flg
+		FROM m_company
+		WHERE delete_flg =#{deleteFlg}
+  </select>
+  </mapper>
